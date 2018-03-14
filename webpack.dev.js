@@ -39,7 +39,8 @@ module.exports = {
   entry: ['./src/leaflet-measure.js'],
   output: {
     filename: 'leaflet-measure.js',
-    path: BUILD_DIR
+    path: BUILD_DIR,
+    library: 'leafletMeasure'
   },
   devServer: {
     contentBase: BUILD_DIR

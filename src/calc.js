@@ -3,6 +3,7 @@
 
 import length from '@turf/length';
 import area from '@turf/area';
+import geocrunch from 'geocrunch';
 
 function pad(num) {
   return num < 10 ? '0' + num.toString() : num.toString();
@@ -15,6 +16,34 @@ function ddToDms(coordinate, posSymbol, negSymbol) {
     s = Math.round((dd - d - m / 60) * 3600 * 100) / 100,
     directionSymbol = dd === coordinate ? posSymbol : negSymbol;
   return pad(d) + '&deg; ' + pad(m) + "' " + pad(s) + '" ' + directionSymbol;
+}
+
+export function measure(latlngs) {
+  const last = (latlngs || [])[latlngs.length - 1];
+  // console.log('measure is running, latlngs:', latlngs);
+  const path = geocrunch.path(latlngs.map(latlng => [latlng.lng, latlng.lat]));
+
+  const meters = path.distance({
+    units: 'meters'
+  });
+  const sqMeters = path.area({
+    units: 'sqmeters'
+  });
+
+  return {
+    lastCoord: {
+      dd: {
+        x: last.lng,
+        y: last.lat
+      },
+      dms: {
+        x: ddToDms(last.lng, 'E', 'W'),
+        y: ddToDms(last.lat, 'N', 'S')
+      }
+    },
+    length: meters,
+    area: sqMeters
+  };
 }
 
 /* calc measurements for an array of points */

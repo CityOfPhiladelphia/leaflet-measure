@@ -58,8 +58,11 @@
   <script src="leaflet-measure.js"></script>
   <script>
     (function(L, document) {
+      // activate leaflet measure plugin
+      L = leafletMeasure.default(L);
+
       var map = L.map('map', {
-        center: [29.749817, -95.080757],
+        center: [39.953338, -75.163471],
         zoom: 16,
         measureControl: true
       });

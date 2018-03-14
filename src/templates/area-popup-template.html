@@ -1,6 +1,37 @@
+
+
 <h3>${ __('areaMeasurement') }</h3>
-<p>{{ model.areaDisplay }}</p>
-<p>{{ model.lengthDisplay }} ${ __('perimeter') }</p>
+
+
+<% if (model.pointCount > 0) { %>
+  <p>
+    <table>
+      <tr>
+        <th style="padding-left:5px; padding-right:5px; text-align:center"><span class="heading">Lat</span></th>
+        <th style="padding-left:5px; padding-right:5px; text-align:center"><span class="heading">Lon</span></th>
+        <th style="padding-left:5px; padding-right:5px; text-align:center"><span class="heading">Length (ft)</span></th>
+      </tr>
+      <tr>
+        <% for (i=0; i < model.points.length; i++) { %>
+          <tr>
+            <td>
+              {{ numberFormat(model.points[i].lat, 6) }}
+            </td>
+            <td>
+              {{ numberFormat(model.points[i].lng, 6) }}
+            </td>
+            <td>
+              {{ model.lengths[i-1] }}
+            </td>
+          </tr>
+        <% } %>
+      </tr>
+    </table>
+  </p>
+<% } %>
+<!-- <p>Total Distance: {{ model.lengthDisplay }} ${ __('perimeter') }</p> -->
+<p>Total Distance: {{ model.lengthDisplay }} Feet</p>
+<p>Area: {{ model.areaDisplay }} Sq Feet</p>
 <ul class="tasks">
   <li><a href="#" class="js-zoomto zoomto">${ __('centerOnArea') }</a></li>
   <li><a href="#" class="js-deletemarkup deletemarkup">${ __('delete') }</a></li>
