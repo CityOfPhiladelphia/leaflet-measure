@@ -775,20 +775,4 @@ const MeasureControl = L.Control.extend({
   }
 });
 
-export default function(L) {
-  L.Map.mergeOptions({
-    measureControl: false
-  });
-
-  L.Map.addInitHook(function() {
-    if (this.options.measureControl) {
-      this.measureControl = new MeasureControl().addTo(this);
-    }
-  });
-
-  L.control.measure = function(options) {
-    return new MeasureControl(options);
-  };
-
-  return L;
-}
+export default MeasureControl;
