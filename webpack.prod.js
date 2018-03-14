@@ -53,7 +53,8 @@ module.exports = Object.keys(languages).map(language => {
     output: {
       filename: `leaflet-measure${langPrefix}.js`,
       path: BUILD_DIR,
-      publicPath: '/dist/'
+      publicPath: '/dist/',
+      libraryTarget: 'umd',
     },
     module: {
       rules: [jsLoader, htmlLoader, scssLoader]
