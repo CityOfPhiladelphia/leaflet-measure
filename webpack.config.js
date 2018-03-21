@@ -9,6 +9,7 @@ const commonConfig = {
   output: {
     filename: 'leaflet-measure.js',
     path: BUILD_DIR,
+    library: 'leafletMeasure',
     libraryTarget: 'umd',
   },
   module: {

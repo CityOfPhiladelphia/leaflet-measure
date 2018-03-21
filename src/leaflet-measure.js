@@ -25,8 +25,6 @@ const pointPopupTemplateCompiled = template(pointPopupTemplate, templateSettings
 const linePopupTemplateCompiled = template(linePopupTemplate, templateSettings);
 const areaPopupTemplateCompiled = template(areaPopupTemplate, templateSettings);
 
-// export default L.Control.extend({
-// L.Control.Measure = L.Control.extend({
 const MeasureControl = L.Control.extend({
   _className: 'leaflet-control-measure',
   options: {
