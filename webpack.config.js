@@ -3,9 +3,9 @@ const CopyPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  entry: ['./src/leaflet-measure.js'],
+  entry: './src/leaflet-measure.js',
   output: {
-    filename: `leaflet-measure${langPrefix}.js`,
+    filename: 'leaflet-measure.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/dist/',
     libraryTarget: 'umd',
@@ -35,20 +35,21 @@ module.exports = {
       // sass loader
       {
         test: /\.scss$/,
-        use: extractSass.extract({
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                url: false,
-              },
-            },
-            {
-              loader: 'sass-loader',
-            },
-          ],
-          fallback: 'style-loader',
-        })
+        use: new ExtractTextPlugin({ filename: 'leaflet-measure.css' })
+                .extract({
+                  use: [
+                    {
+                      loader: 'css-loader',
+                      options: {
+                        url: false,
+                      },
+                    },
+                    {
+                      loader: 'sass-loader',
+                    },
+                  ],
+                  fallback: 'style-loader',
+                })
       }, // end sass loader
     ], // end rules
   }, // end module
