@@ -1,20 +1,11 @@
-// if (location.hostname !== 'localhost') {
-//   console.log = console.info = console.debug = console.error = function() {};
-// }
-
 import * as L from 'leaflet';
-
-import '../scss/leaflet-measure.scss';
-
 import template from 'lodash/template';
-
 import units from './units';
 import { default as calc, measure } from './calc';
 import * as dom from './dom';
 import { selectOne as $ } from './dom';
 import Symbology from './symbology';
 import { numberFormat } from './utils';
-
 import {
   controlTemplate,
   resultsTemplate,
@@ -22,6 +13,7 @@ import {
   linePopupTemplate,
   areaPopupTemplate
 } from './templates';
+import '../scss/leaflet-measure.scss';
 
 const templateSettings = {
   imports: { numberFormat },
@@ -52,13 +44,13 @@ const MeasureControl = L.Control.extend({
       autoPanPadding: [10, 10]
     }
   },
-  initialize: function(options) {
+  initialize: function (options) {
     L.setOptions(this, options);
     const { activeColor, completedColor } = this.options;
     this._symbols = new Symbology({ activeColor, completedColor });
     this.options.units = L.extend({}, units, this.options.units);
   },
-  onAdd: function(map) {
+  onAdd: function (map) {
     this._map = map;
 
     // arrays used to hold simple values
@@ -78,11 +70,11 @@ const MeasureControl = L.Control.extend({
     this._layer = L.layerGroup().addTo(map);
     return this._container;
   },
-  onRemove: function(map) {
+  onRemove: function (map) {
     map.off('click', this._collapse, this);
     map.removeLayer(this._layer);
   },
-  _initLayout: function() {
+  _initLayout: function () {
     const className = this._className,
       container = (this._container = L.DomUtil.create('div', `${className} leaflet-bar`));
     // var $toggle, $start, $cancel, $undo, $finish;
@@ -132,11 +124,11 @@ const MeasureControl = L.Control.extend({
     L.DomEvent.on($finish, 'click', L.DomEvent.stop);
     L.DomEvent.on($finish, 'click', this._handleMeasureDoubleClick, this);
   },
-  _expand: function() {
+  _expand: function () {
     dom.hide(this.$toggle);
     dom.show(this.$interaction);
   },
-  _collapse: function() {
+  _collapse: function () {
     if (!this._locked) {
       dom.hide(this.$interaction);
       dom.show(this.$toggle);
@@ -144,21 +136,21 @@ const MeasureControl = L.Control.extend({
   },
   // move between basic states:
   // measure not started, started/in progress but no points added, in progress and with points
-  _updateMeasureNotStarted: function() {
+  _updateMeasureNotStarted: function () {
     dom.hide(this.$startHelp);
     dom.hide(this.$results);
     dom.hide(this.$measureTasks);
     dom.hide(this.$measuringPrompt);
     dom.show(this.$startPrompt);
   },
-  _updateMeasureStartedNoPoints: function() {
+  _updateMeasureStartedNoPoints: function () {
     dom.hide(this.$results);
     dom.show(this.$startHelp);
     dom.show(this.$measureTasks);
     dom.hide(this.$startPrompt);
     dom.show(this.$measuringPrompt);
   },
-  _updateMeasureStartedWithPoints: function() {
+  _updateMeasureStartedWithPoints: function () {
     dom.hide(this.$startHelp);
     dom.show(this.$results);
     dom.show(this.$measureTasks);
@@ -166,7 +158,7 @@ const MeasureControl = L.Control.extend({
     dom.show(this.$measuringPrompt);
   },
   // get state vars and interface ready for measure
-  _startMeasure: function() {
+  _startMeasure: function () {
     this._locked = true;
     // new leaflet feature groups are created on _startMeasure
     this._measureLengths = L.featureGroup().addTo(this._layer);
@@ -197,7 +189,7 @@ const MeasureControl = L.Control.extend({
   },
 
   // remove the last clicked point and notation
-  _undoMeasure: function() {
+  _undoMeasure: function () {
     // remove last simple coordinate from _latlngs
     this._latlngs = this._latlngs.slice(0, -1);
     // remove the last length notation
@@ -216,7 +208,7 @@ const MeasureControl = L.Control.extend({
   },
 
   // return to state with no measure in progress, undo `this._startMeasure`
-  _finishMeasure: function(isComplete) {
+  _finishMeasure: function (isComplete) {
     let shouldDeleteLengths;
     if (isComplete === true) {
       shouldDeleteLengths = false;
@@ -227,8 +219,6 @@ const MeasureControl = L.Control.extend({
     const model = Object.assign({}, this._resultsModel, {
       points: this._latlngs
     });
-    // _finishMeasure: function() {
-    // const model = L.extend({}, this._resultsModel, { points: this._latlngs });
 
     this._locked = false;
 
@@ -256,7 +246,7 @@ const MeasureControl = L.Control.extend({
     this._map.fire('measurefinish', model, false);
   },
   // clear all running measure data
-  _clearMeasure: function(shouldDeleteLengths) {
+  _clearMeasure: function (shouldDeleteLengths) {
     this._latlngs = [];
     this._resultsModel = null;
     if (shouldDeleteLengths) {
@@ -277,11 +267,11 @@ const MeasureControl = L.Control.extend({
     this._measureBoundary = null;
   },
   // centers the event capture marker
-  _centerCaptureMarker: function() {
+  _centerCaptureMarker: function () {
     this._captureMarker.setLatLng(this._map.getCenter());
   },
   // set icon on the capture marker
-  _setCaptureMarkerIcon: function() {
+  _setCaptureMarkerIcon: function () {
     this._captureMarker.setIcon(
       L.divIcon({
         iconSize: this._map.getSize().multiplyBy(2)
@@ -290,7 +280,7 @@ const MeasureControl = L.Control.extend({
   },
   // format measurements to nice display string based on units in options
   // `{ lengthDisplay: '100 Feet (0.02 Miles)', areaDisplay: ... }`
-  _getMeasurementDisplayStrings: function(measurement) {
+  _getMeasurementDisplayStrings: function (measurement) {
     // console.log(
     //   '_getMeasurementDisplayStrings units:',
     //   this.options.units,
@@ -365,7 +355,7 @@ const MeasureControl = L.Control.extend({
 
   // format measurements to nice SHORTER display string based on units in options
   // `{ lengthDisplay: '100 ft', areaDisplay: ... }`
-  _getShorterMeasurementDisplayStrings: function(measurement) {
+  _getShorterMeasurementDisplayStrings: function (measurement) {
     // console.log(
     //   '_getShorterMeasurementDisplayStrings measurement.length:',
     //   measurement.length,
@@ -476,7 +466,7 @@ const MeasureControl = L.Control.extend({
   },
 
   // update results area of dom with calced measure from `this._latlngs`
-  _updateResults: function() {
+  _updateResults: function () {
     const calced = calc(this._latlngs);
     const model = (this._resultsModel = L.extend(
       {},
@@ -493,7 +483,7 @@ const MeasureControl = L.Control.extend({
   },
   // mouse move handler while measure in progress
   // adds floating measure marker under cursor
-  _handleMeasureMove: function(evt) {
+  _handleMeasureMove: function (evt) {
     if (!this._measureDrag) {
       this._measureDrag = L.circleMarker(evt.latlng, this._symbols.getSymbol('measureDrag')).addTo(
         this._layer
@@ -505,7 +495,7 @@ const MeasureControl = L.Control.extend({
   },
   // handler for both double click and clicking finish button
   // do final calc and finish out current measure, clear dom and internal state, add permanent map features
-  _handleMeasureDoubleClick: function() {
+  _handleMeasureDoubleClick: function () {
     const latlngs = this._latlngs;
 
     const measureFeature = L.layerGroup();
@@ -594,7 +584,7 @@ const MeasureControl = L.Control.extend({
       L.DomEvent.on(
         zoomLink,
         'click',
-        function() {
+        function () {
           if (resultFeature.getBounds) {
             this._map.fitBounds(resultFeature.getBounds(), {
               padding: [20, 20],
@@ -614,7 +604,7 @@ const MeasureControl = L.Control.extend({
       L.DomEvent.on(
         deleteLink,
         'click',
-        function() {
+        function () {
           const i = this._measureFeatures.indexOf(measureFeature);
           const selectedMeasureFeature = this._measureFeatures[i];
           selectedMeasureFeature.removeFrom(this._layer);
@@ -633,7 +623,7 @@ const MeasureControl = L.Control.extend({
   },
   // handle map click during ongoing measurement
   // add new clicked point, update measure layers and results ui
-  _handleMeasureClick: function(evt) {
+  _handleMeasureClick: function (evt) {
     let latlng = this._map.mouseEventToLatLng(evt.originalEvent), // get actual latlng instead of the marker's latlng from originalEvent
       // lastClick = _.last(this._latlngs),
       // firstClick = _.first(this._latlngs),
@@ -657,7 +647,7 @@ const MeasureControl = L.Control.extend({
       this._addMeasureArea(this._latlngs);
       this._addMeasureBoundary(this._latlngs);
 
-      this._measureVertexes.eachLayer(function(layer) {
+      this._measureVertexes.eachLayer(function (layer) {
         layer.setStyle(vertexSymbol);
         // reset all vertexes to non-active class - only last vertex is active
         // `layer.setStyle({ className: 'layer-measurevertex'})` doesn't work. https://github.com/leaflet/leaflet/issues/2662
@@ -691,9 +681,8 @@ const MeasureControl = L.Control.extend({
     this._updateMeasureStartedWithPoints();
   },
 
-  _addNewLengthNotation: function(latlng, calced) {
+  _addNewLengthNotation: function (latlng, calced) {
     const answer = this._getShorterMeasurementDisplayStrings(calced);
-    // console.log('_addNewLengthNotation latlng:', latlng, 'calced', calced, 'answer:', answer);
     const myIcon = L.divIcon({
       className: 'my-div-icon',
       html: answer.lengthDisplay
@@ -706,8 +695,9 @@ const MeasureControl = L.Control.extend({
     this._lengthNotations.push(marker);
     return marker;
   },
+
   // remove last length notation (when undo is clicked)
-  _removeLastLengthNotation: function() {
+  _removeLastLengthNotation: function () {
     const i = this._lengthNotations.length;
     // _lengthNotations is a simple array holding leaflet markers of leaflet divIcons
     // it is used here to remove a marker from the feature group that is on the map
@@ -721,27 +711,27 @@ const MeasureControl = L.Control.extend({
   },
   // handle map mouse out during ongoing measure
   // remove floating cursor vertex from map
-  _handleMapMouseOut: function() {
+  _handleMapMouseOut: function () {
     if (this._measureDrag) {
       this._layer.removeLayer(this._measureDrag);
       this._measureDrag = null;
     }
   },
   // add various measure graphics to map - vertex, area, boundary
-  _addNewVertex: function(latlng) {
+  _addNewVertex: function (latlng) {
     const marker = L.circleMarker(latlng, this._symbols.getSymbol('measureVertexActive'));
     this._vertexCircleMarkers.push(marker);
     marker.addTo(this._measureVertexes);
   },
   // remove last vertex (when undo is clicked)
-  _removeLastVertex: function() {
+  _removeLastVertex: function () {
     const i = this._vertexCircleMarkers.length;
     if (this._vertexCircleMarkers.length > 0) {
       this._vertexCircleMarkers[i - 1].removeFrom(this._measureVertexes);
     }
     this._vertexCircleMarkers = this._vertexCircleMarkers.slice(0, -1);
   },
-  _addMeasureArea: function(latlngs) {
+  _addMeasureArea: function (latlngs) {
     if (latlngs.length < 3) {
       if (this._measureArea) {
         this._layer.removeLayer(this._measureArea);
@@ -757,7 +747,7 @@ const MeasureControl = L.Control.extend({
       this._measureArea.setLatLngs(latlngs);
     }
   },
-  _addMeasureBoundary: function(latlngs) {
+  _addMeasureBoundary: function (latlngs) {
     if (latlngs.length < 2) {
       if (this._measureBoundary) {
         this._layer.removeLayer(this._measureBoundary);
