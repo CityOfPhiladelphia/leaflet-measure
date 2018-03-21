@@ -2,29 +2,17 @@ const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-module.exports = {
+const BUILD_DIR = path.resolve(__dirname, 'dist');
+
+const commonConfig = {
   entry: './src/leaflet-measure.js',
   output: {
     filename: 'leaflet-measure.js',
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/dist/',
+    path: BUILD_DIR,
     libraryTarget: 'umd',
   },
   module: {
     rules: [
-      // js loader
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader?optional=runtime',
-          options: {
-            presets: [
-              'babel-preset-env',
-            ],
-          },
-        },
-      },
       // html loader
       {
         test: /\.html$/,
@@ -60,3 +48,34 @@ module.exports = {
     new ExtractTextPlugin({ filename: 'leaflet-measure.css' }),
   ],
 };
+
+const config = Object.assign({}, commonConfig);
+
+// prod
+if (process.env.NODE_ENV === 'production') {
+  // put a javascript loader at the beginning of module rules
+  config.module.rules.unshift({
+    test: /\.js$/,
+    exclude: /node_modules/,
+    use: {
+      loader: 'babel-loader?optional=runtime',
+      options: {
+        presets: [
+          'babel-preset-env',
+        ],
+      },
+    },
+  });
+
+  config.output.publicPath = '/dist/';
+// dev
+} else {
+  Object.assign(config, {
+    devServer: {
+      contentBase: BUILD_DIR,
+    },
+    devtool: 'eval-source-map',
+  });
+}
+
+module.exports = config;
