@@ -1,6 +1,4 @@
-
-
-<h3>${ __('areaMeasurement') }</h3>
+<h3>Area measurement</h3>
 
 
 <% if (model.pointCount > 0) { %>
@@ -29,10 +27,9 @@
     </table>
   </p>
 <% } %>
-<!-- <p>Total Distance: {{ model.lengthDisplay }} ${ __('perimeter') }</p> -->
 <p>Total Distance: {{ model.lengthDisplay }} Feet</p>
 <p>Area: {{ model.areaDisplay }} Sq Feet</p>
 <ul class="tasks">
-  <li><a href="#" class="js-zoomto zoomto">${ __('centerOnArea') }</a></li>
-  <li><a href="#" class="js-deletemarkup deletemarkup">${ __('delete') }</a></li>
+  <li><a href="#" class="js-zoomto zoomto">Center on this area</a></li>
+  <li><a href="#" class="js-deletemarkup deletemarkup">Delete</a></li>
 </ul>

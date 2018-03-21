@@ -330,23 +330,23 @@ const MeasureControl = L.Control.extend({
 
     function formatMeasure(val, unit, decPoint, thousandsSep) {
       const unitDisplays = {
-        acres: __('acres'),
-        feet: __('feet'),
-        kilometers: __('kilometers'),
-        hectares: __('hectares'),
-        meters: __('meters'),
-        miles: __('miles'),
-        sqfeet: __('sqfeet'),
-        sqmeters: __('sqmeters'),
-        sqmiles: __('sqmiles')
+        acres: 'Acres',
+        feet: 'Feet',
+        kilometers: 'Kilometers',
+        hectares: 'Hectares',
+        meters: 'Meters',
+        miles: 'Miles',
+        sqfeet: 'Sq Feet',
+        sqmeters: 'Sq Meters',
+        sqmiles: 'Sq Miles',
       };
 
       const u = L.extend({ factor: 1, decimals: 0 }, unit);
       const formattedNumber = numberFormat(
         val * u.factor,
         u.decimals,
-        decPoint || __('decPoint'),
-        thousandsSep || __('thousandsSep')
+        '.',
+        ','
       );
       const label = unitDisplays[u.display] || u.display;
       return [formattedNumber, label].join(' ');
@@ -383,26 +383,8 @@ const MeasureControl = L.Control.extend({
     };
 
     function buildDisplay(val, primaryUnit, secondaryUnit, decPoint, thousandsSep) {
-      // console.log(
-      //   '_getShorter... buildDisplay is running, val:',
-      //   val,
-      //   'primaryUnit:',
-      //   primaryUnit,
-      //   'secondaryUnit:',
-      //   secondaryUnit,
-      //   'decPoint:',
-      //   decPoint,
-      //   'thousandsSep:',
-      //   thousandsSep
-      // );
       let display;
       if (primaryUnit) {
-        // console.log(
-        //   '_getShorter... buildDisplay, unitDefinitions:',
-        //   unitDefinitions,
-        //   'unitDefinitions[primaryUnit]:',
-        //   unitDefinitions[primaryUnit]
-        // );
         display = formatMeasure(val, unitDefinitions[primaryUnit], decPoint, thousandsSep);
         if (secondaryUnit && unitDefinitions[secondaryUnit]) {
           display =
@@ -418,51 +400,15 @@ const MeasureControl = L.Control.extend({
     }
 
     function formatMeasure(val, unit, decPoint, thousandsSep) {
-      // const unitDisplays = {
-      //   acres: __('acres'),
-      //   feet: __('feet'),
-      //   kilometers: __('kilometers'),
-      //   hectares: __('hectares'),
-      //   meters: __('meters'),
-      //   miles: __('miles'),
-      //   sqfeet: __('sqfeet'),
-      //   sqmeters: __('sqmeters'),
-      //   sqmiles: __('sqmiles')
-      // };
-
       const u = L.extend({ factor: 1, decimals: 2 }, unit);
-      // console.log(
-      //   'formatMeasure val:',
-      //   val,
-      //   'unit:',
-      //   unit,
-      //   'decPoint:',
-      //   decPoint,
-      //   'thousandsSep:',
-      //   thousandsSep,
-      //   'u:',
-      //   u
-      // );
       const formattedNumber = numberFormat(
         val * u.factor,
         u.decimals,
-        decPoint || __('decPoint'),
-        thousandsSep || __('thousandsSep')
+        '.',
+        ','
       );
-      // const label = unitDisplays[u.display] || u.display;
-      // return [formattedNumber, label].join(' ');
       return formattedNumber;
     }
-    // function formatMeasure (val, unit, decPoint, thousandsSep) {
-    //   unit.decimals = 2;
-    //   // unit.display = 'ft';
-    //   var finalAnswer;
-    //   // finalAnswer = unit && unit.factor && unit.display ?
-    //   finalAnswer = unit && unit.factor ?
-    //     humanize.numberFormat(val * unit.factor, unit.decimals || 0, decPoint || i18n.__('decPoint'), thousandsSep || i18n.__('thousandsSep')) ://+ ' ' + i18n.__([unit.display]) || unit.display :
-    //     humanize.numberFormat(val, 0, decPoint || i18n.__('decPoint'), thousandsSep || i18n.__('thousandsSep'));
-    //   return finalAnswer;
-    // }
   },
 
   // update results area of dom with calced measure from `this._latlngs`
@@ -509,24 +455,19 @@ const MeasureControl = L.Control.extend({
     for (let i = 0; i < this._lengths.length; i++) {
       lengths[i] = this._lengths[i];
     }
-    // console.log('_handleMeasureDoubleClick is running, lengths:', lengths);
-    // console.log('!!!!!!!!! this._lengths:', this._lengths, 'lengths1:', lengths);
 
     if (!latlngs.length) {
       return;
     }
 
     if (latlngs.length > 2) {
-      // latlngs.push(_.first(latlngs));
       latlngs.push((latlngs || [])[0]);
       const count = latlngs.length;
       const previousLatLng = latlngs[count - 2];
       const lastLatLng = latlngs[count - 1];
-      // console.log('previousLatLng:', previousLatLng, 'lastLatLng:', lastLatLng);
       const bounds = L.latLngBounds(previousLatLng, lastLatLng);
       const center = bounds.getCenter();
       const pair = [previousLatLng, lastLatLng];
-      // var calced2 = calc.measure(pair);
       const calced2 = measure(pair);
       const newNotation = this._addNewLengthNotation(center, calced2);
       newNotation.addTo(this._measureLengths);
@@ -534,7 +475,6 @@ const MeasureControl = L.Control.extend({
       lengths[j - 1] = this._lengths[j - 1];
     }
 
-    // calced = calc.measure(latlngs);
     const calced = measure(latlngs);
     let resultFeature;
     let popupContent;
@@ -564,10 +504,8 @@ const MeasureControl = L.Control.extend({
           lengths: this._lengths
         }
       );
-      // console.log('resultsModel', resultsModel);
       popupContent = areaPopupTemplateCompiled({
-        model: resultsModel
-        // model: L.extend({}, calced, this._getMeasurementDisplayStrings(calced))
+        model: resultsModel,
       });
     }
 
@@ -625,22 +563,10 @@ const MeasureControl = L.Control.extend({
   // add new clicked point, update measure layers and results ui
   _handleMeasureClick: function (evt) {
     let latlng = this._map.mouseEventToLatLng(evt.originalEvent), // get actual latlng instead of the marker's latlng from originalEvent
-      // lastClick = _.last(this._latlngs),
-      // firstClick = _.first(this._latlngs),
       lastClick = (this._latlngs || []).slice(-1)[0],
       firstClick = (this._latlngs || [])[0],
       vertexSymbol = this._symbols.getSymbol('measureVertex');
 
-    // console.log(
-    //   '_handleMeasureClick is running, this._lengths:',
-    //   this._lengths,
-    //   'this._latlngs:',
-    //   this._latlngs,
-    //   'latlng:',
-    //   latlng,
-    //   'lastClick:',
-    //   lastClick
-    // );
     if (!lastClick || !latlng.equals(lastClick)) {
       // skip if same point as last click, happens on `dblclick`
       this._latlngs.push(latlng);

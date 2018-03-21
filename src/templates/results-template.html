@@ -1,4 +1,3 @@
-
 <% if (model.pointCount > 0) { %>
   <div class="group">
       <table>
@@ -26,21 +25,13 @@
   </div>
 <% } %>
 
-<!-- <div class="group">
-  <p class="lastpoint heading">${ __('lastPoint') }</p>
-  <p>{{ model.lastCoord.dms.y }} <span class="coorddivider">/</span> {{ model.lastCoord.dms.x }}</p>
-  <p>{{ numberFormat(model.lastCoord.dd.y, 6) }} <span class="coorddivider">/</span> {{ numberFormat(model.lastCoord.dd.x, 6) }}</p>
-</div> -->
-
 <% if (model.pointCount > 1) { %>
 <div class="group">
-  <!-- <p><span class="heading">${ __('pathDistance') }</span> {{ model.lengthDisplay }}</p> -->
   <p><span class="heading"></span>Total Distance: {{ model.lengthDisplay }} Feet</p>
 </div>
 <% } %>
 <% if (model.pointCount > 2) { %>
 <div class="group">
-  <!-- <p><span class="heading">${ __('area') }</span> {{ model.areaDisplay }}</p> -->
   <p><span class="heading"></span>Area: {{ model.areaDisplay }} Sq Feet</p>
 </div>
 <% } %>
