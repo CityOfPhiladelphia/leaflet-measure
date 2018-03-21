@@ -23,8 +23,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint --ext js src/",
-    "build": "webpack --config webpack.prod.js -p",
-    "start:dev": "webpack-dev-server --open --config webpack.dev.js",
+    "build": "webpack -p",
+    "start:dev": "webpack-dev-server --open",
     "precommit": "lint-staged",
     "prepublishOnly": "yarn build",
     "ghpages": "yarn build && gh-pages -d dist"
