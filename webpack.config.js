@@ -1,4 +1,5 @@
 const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 const CopyPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
@@ -12,6 +13,8 @@ const commonConfig = {
     library: 'leafletMeasure',
     libraryTarget: 'umd',
   },
+  // this prevents node_modules from being bundled
+  externals: [nodeExternals()],
   module: {
     rules: [
       // html loader
