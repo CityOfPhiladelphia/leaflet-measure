@@ -1,23 +1,22 @@
 import * as L from 'leaflet';
 import template from 'lodash/template';
-import units from './units';
-import { default as calc, measure } from './calc';
-import * as dom from './dom';
-import { selectOne as $ } from './dom';
+import units from './util/units';
+import * as dom from './util/dom';
 import Symbology from './symbology';
-import { numberFormat } from './utils';
-import {
-  controlTemplate,
-  resultsTemplate,
-  pointPopupTemplate,
-  linePopupTemplate,
-  areaPopupTemplate
-} from './templates';
-import '../scss/leaflet-measure.scss';
+
+// templates
+import controlTemplate from './templates/control-template.html';
+import resultsTemplate from './templates/results-template.html';
+import pointPopupTemplate from './templates/point-popup-template.html';
+import linePopupTemplate from './templates/line-popup-template.html';
+import areaPopupTemplate from './templates/area-popup-template.html';
+
+// alias element selector
+const $ = dom.selectOne;
 
 const templateSettings = {
-  imports: { numberFormat },
-  interpolate: /{{([\s\S]+?)}}/g // mustache
+  imports: { numberFormat: num => num.toLocaleString(num) },
+  interpolate: /{{([\s\S]+?)}}/g, // mustache
 };
 const controlTemplateCompiled = template(controlTemplate, templateSettings);
 const resultsTemplateCompiled = template(resultsTemplate, templateSettings);
@@ -42,12 +41,14 @@ const MeasureControl = L.Control.extend({
       autoPanPadding: [10, 10]
     }
   },
+
   initialize: function (options) {
     L.setOptions(this, options);
     const { activeColor, completedColor } = this.options;
     this._symbols = new Symbology({ activeColor, completedColor });
-    this.options.units = L.extend({}, units, this.options.units);
+    this.options.units = Object.assign({}, units, this.options.units);
   },
+
   onAdd: function (map) {
     this._map = map;
 
@@ -64,14 +65,20 @@ const MeasureControl = L.Control.extend({
     this._measureFeatures = [];
 
     this._initLayout();
+
     map.on('click', this._collapse, this);
+
     this._layer = L.layerGroup().addTo(map);
+
     return this._container;
   },
+
   onRemove: function (map) {
     map.off('click', this._collapse, this);
+
     map.removeLayer(this._layer);
   },
+
   _initLayout: function () {
     const className = this._className,
       container = (this._container = L.DomUtil.create('div', `${className} leaflet-bar`));
@@ -122,16 +129,19 @@ const MeasureControl = L.Control.extend({
     L.DomEvent.on($finish, 'click', L.DomEvent.stop);
     L.DomEvent.on($finish, 'click', this._handleMeasureDoubleClick, this);
   },
+
   _expand: function () {
     dom.hide(this.$toggle);
     dom.show(this.$interaction);
   },
+
   _collapse: function () {
     if (!this._locked) {
       dom.hide(this.$interaction);
       dom.show(this.$toggle);
     }
   },
+
   // move between basic states:
   // measure not started, started/in progress but no points added, in progress and with points
   _updateMeasureNotStarted: function () {
@@ -141,6 +151,7 @@ const MeasureControl = L.Control.extend({
     dom.hide(this.$measuringPrompt);
     dom.show(this.$startPrompt);
   },
+
   _updateMeasureStartedNoPoints: function () {
     dom.hide(this.$results);
     dom.show(this.$startHelp);
@@ -148,6 +159,7 @@ const MeasureControl = L.Control.extend({
     dom.hide(this.$startPrompt);
     dom.show(this.$measuringPrompt);
   },
+
   _updateMeasureStartedWithPoints: function () {
     dom.hide(this.$startHelp);
     dom.show(this.$results);
@@ -155,6 +167,7 @@ const MeasureControl = L.Control.extend({
     dom.hide(this.$startPrompt);
     dom.show(this.$measuringPrompt);
   },
+
   // get state vars and interface ready for measure
   _startMeasure: function () {
     this._locked = true;
@@ -243,6 +256,7 @@ const MeasureControl = L.Control.extend({
 
     this._map.fire('measurefinish', model, false);
   },
+
   // clear all running measure data
   _clearMeasure: function (shouldDeleteLengths) {
     this._latlngs = [];
@@ -264,10 +278,12 @@ const MeasureControl = L.Control.extend({
     this._measureArea = null;
     this._measureBoundary = null;
   },
+
   // centers the event capture marker
   _centerCaptureMarker: function () {
     this._captureMarker.setLatLng(this._map.getCenter());
   },
+
   // set icon on the capture marker
   _setCaptureMarkerIcon: function () {
     this._captureMarker.setIcon(
@@ -276,6 +292,7 @@ const MeasureControl = L.Control.extend({
       })
     );
   },
+
   // format measurements to nice display string based on units in options
   // `{ lengthDisplay: '100 Feet (0.02 Miles)', areaDisplay: ... }`
   _getMeasurementDisplayStrings: function (measurement) {
@@ -339,14 +356,17 @@ const MeasureControl = L.Control.extend({
         sqmiles: 'Sq Miles',
       };
 
-      const u = L.extend({ factor: 1, decimals: 0 }, unit);
-      const formattedNumber = numberFormat(
-        val * u.factor,
-        u.decimals,
-        '.',
-        ','
-      );
-      const label = unitDisplays[u.display] || u.display;
+      // const u = Object.assign({ factor: 1, decimals: 0 }, unit);
+      // const formattedNumber = numberFormat(
+      //   val * u.factor,
+      //   u.decimals,
+      //   '.',
+      //   ','
+      // );
+
+      const { display } = unit;
+      const label = unitDisplays[display] || display;
+
       return [formattedNumber, label].join(' ');
     }
   },
@@ -398,7 +418,7 @@ const MeasureControl = L.Control.extend({
     }
 
     function formatMeasure(val, unit, decPoint, thousandsSep) {
-      const u = L.extend({ factor: 1, decimals: 2 }, unit);
+      const u = Object.assign({ factor: 1, decimals: 2 }, unit);
       const formattedNumber = numberFormat(
         val * u.factor,
         u.decimals,
@@ -412,7 +432,7 @@ const MeasureControl = L.Control.extend({
   // update results area of dom with calced measure from `this._latlngs`
   _updateResults: function () {
     const calced = calc(this._latlngs);
-    const model = (this._resultsModel = L.extend(
+    const model = (this._resultsModel = Object.assign(
       {},
       calced,
       this._getShorterMeasurementDisplayStrings(calced),
@@ -425,6 +445,7 @@ const MeasureControl = L.Control.extend({
     // console.log('_updateResults is running, calced:', calced, 'model:', model);
     this.$results.innerHTML = resultsTemplateCompiled({ model });
   },
+
   // mouse move handler while measure in progress
   // adds floating measure marker under cursor
   _handleMeasureMove: function (evt) {
@@ -437,6 +458,7 @@ const MeasureControl = L.Control.extend({
     }
     this._measureDrag.bringToFront();
   },
+
   // handler for both double click and clicking finish button
   // do final calc and finish out current measure, clear dom and internal state, add permanent map features
   _handleMeasureDoubleClick: function () {
@@ -488,7 +510,7 @@ const MeasureControl = L.Control.extend({
     } else if (latlngs.length === 2) {
       resultFeature = L.polyline(latlngs, this._symbols.getSymbol('resultLine'));
       popupContent = linePopupTemplateCompiled({
-        model: L.extend({}, calced, this._getShorterMeasurementDisplayStrings(calced))
+        model: Object.assign({}, calced, this._getShorterMeasurementDisplayStrings(calced))
       });
     } else {
       resultFeature = L.polygon(latlngs, this._symbols.getSymbol('resultArea'));
@@ -633,6 +655,7 @@ const MeasureControl = L.Control.extend({
     this._lengthNotations = this._lengthNotations.slice(0, -1);
     this._lengths = this._lengths.slice(0, -1);
   },
+
   // handle map mouse out during ongoing measure
   // remove floating cursor vertex from map
   _handleMapMouseOut: function () {
@@ -641,12 +664,14 @@ const MeasureControl = L.Control.extend({
       this._measureDrag = null;
     }
   },
+
   // add various measure graphics to map - vertex, area, boundary
   _addNewVertex: function (latlng) {
     const marker = L.circleMarker(latlng, this._symbols.getSymbol('measureVertexActive'));
     this._vertexCircleMarkers.push(marker);
     marker.addTo(this._measureVertexes);
   },
+
   // remove last vertex (when undo is clicked)
   _removeLastVertex: function () {
     const i = this._vertexCircleMarkers.length;
@@ -655,6 +680,7 @@ const MeasureControl = L.Control.extend({
     }
     this._vertexCircleMarkers = this._vertexCircleMarkers.slice(0, -1);
   },
+
   _addMeasureArea: function (latlngs) {
     if (latlngs.length < 3) {
       if (this._measureArea) {
@@ -671,6 +697,7 @@ const MeasureControl = L.Control.extend({
       this._measureArea.setLatLngs(latlngs);
     }
   },
+
   _addMeasureBoundary: function (latlngs) {
     if (latlngs.length < 2) {
       if (this._measureBoundary) {
@@ -686,7 +713,7 @@ const MeasureControl = L.Control.extend({
     } else {
       this._measureBoundary.setLatLngs(latlngs);
     }
-  }
+  },
 });
 
 export default MeasureControl;
