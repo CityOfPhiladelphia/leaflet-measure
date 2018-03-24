@@ -1,0 +1,40 @@
+body {
+  font-size: 14px;
+  font-family: Helvetica, sans-serif;
+  font-weight: 400;
+  line-height: 1;
+  color: #222;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  margin: 0 20px 20px;
+}
+h1, h2 {
+  margin: 20px 0 0;
+  font-size: 1.4em;
+  font-weight: normal;
+  line-height: 1;
+}
+h1 {
+  display: inline-block;
+  font-size: 1.4em;
+}
+h2 {
+  font-size: 1.1em;
+}
+pre {
+  line-height: 1.5em;
+}
+p.github {
+  display: inline-block;
+  margin: 20px 0 0 20px;
+  font-size: 1.2em;
+}
+a, a:visited, a:hover, a:active, a:focus {
+  text-decoration: none;
+}
+#map {
+  height: 500px;
+  margin: 20px 20px 0 0;
+}
