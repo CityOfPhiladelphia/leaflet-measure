@@ -173,21 +173,3 @@ Map features may be styled using CSS SVG style attributes. Features generated fr
 - **layer-measure-resultpoint**: Featured added to the map as a permanent layer resulting from a point (single click) measurement
 
 <hr>
-
-## Development
-
-The build process uses npm (Node Package Management) which comes with Node.js.
-
-After you have Node.js installed you can do ```npm install``` to install dependencies and ```npm run-script start:dev``` to initialize a local server (localhost:8080) for leaflet-measure assets.
-
-It detects modifications on source files and re-compiles to /leaflet-measure.css and /leaflet-measure.js.
-
-## Distribuition Build
-
-With npm installed do ```npm install``` to install dependencies and ```npm run-script build``` to generate dist/leaflet-measure.css and dist/leaflet-measure.js.
-
-It will also generate dist/leaflet-measure.{locale}.js files for each localization available.
-
-## Internationalization
-
-TODO. Internationalization
