@@ -2,6 +2,7 @@ import * as L from 'leaflet';
 import template from 'lodash/template';
 import units from './util/units';
 import * as dom from './util/dom';
+import measure from './util/measure';
 import Symbology from './symbology';
 
 // templates
@@ -431,7 +432,7 @@ const MeasureControl = L.Control.extend({
 
   // update results area of dom with calced measure from `this._latlngs`
   _updateResults: function () {
-    const calced = calc(this._latlngs);
+    const calced = measure(this._latlngs);
     const model = (this._resultsModel = Object.assign(
       {},
       calced,
