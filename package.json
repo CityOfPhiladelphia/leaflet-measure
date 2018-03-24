@@ -19,7 +19,7 @@
     "polygon",
     "path"
   ],
-  "author": "LJA Engineering, Inc - GIS <gisdev@ljaengineering.com>",
+  "author": "City of Philadelphia <maps@phila.gov>",
   "license": "MIT",
   "scripts": {
     "lint": "eslint --ext js src/",
