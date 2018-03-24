@@ -97,7 +97,7 @@
   border: 0;
   text-align: left;
   color: #5e66cc;
-  background-image: url("assets/start.png");
+  background-image: url('assets/start.png');
   background-repeat: no-repeat;
   background-position: 0% 50%;
   background-size: 12px 12px;
@@ -108,7 +108,7 @@
   background-color: transparent;
 }
 .leaflet-retina .leaflet-control-measure a.start {
-  background-image: url("assets/start_@2X.png");
+  background-image: url('assets/start_@2X.png');
 }
 .leaflet-control-measure a.start:hover {
   opacity: 0.5;
@@ -124,7 +124,7 @@
   border: 0;
   text-align: left;
   color: #5e66cc;
-  background-image: url("assets/cancel.png");
+  background-image: url('assets/cancel.png');
   background-repeat: no-repeat;
   background-position: 0% 50%;
   background-size: 12px 12px;
@@ -135,7 +135,7 @@
   background-color: transparent;
 }
 .leaflet-retina .leaflet-control-measure a.cancel {
-  background-image: url("assets/cancel_@2X.png");
+  background-image: url('assets/cancel_@2X.png');
 }
 .leaflet-control-measure a.cancel:hover {
   opacity: 0.5;
@@ -151,7 +151,7 @@
   border: 0;
   text-align: left;
   color: #5e66cc;
-  background-image: url("assets/undo.png");
+  background-image: url('assets/undo.png');
   background-repeat: no-repeat;
   background-position: 0% 50%;
   background-size: 12px 12px;
@@ -178,7 +178,7 @@
   border: 0;
   text-align: left;
   color: #5e66cc;
-  background-image: url("assets/check.png");
+  background-image: url('assets/check.png');
   background-repeat: no-repeat;
   background-position: 0% 50%;
   background-size: 12px 12px;
@@ -189,7 +189,7 @@
   background-color: transparent;
 }
 .leaflet-retina .leaflet-control-measure a.finish {
-  background-image: url("assets/check_@2X.png");
+  background-image: url('assets/check_@2X.png');
 }
 .leaflet-control-measure a.finish:hover {
   opacity: 0.5;
@@ -206,7 +206,7 @@
   border: 0;
   text-align: left;
   color: #5e66cc;
-  background-image: url("assets/focus.png");
+  background-image: url('assets/focus.png');
   background-repeat: no-repeat;
   background-position: 0% 50%;
   background-size: 12px 12px;
@@ -217,7 +217,7 @@
   background-color: transparent;
 }
 .leaflet-retina .leaflet-measure-resultpopup a.zoomto {
-  background-image: url("assets/focus_@2X.png");
+  background-image: url('assets/focus_@2X.png');
 }
 .leaflet-measure-resultpopup a.zoomto:hover {
   opacity: 0.5;
@@ -233,7 +233,7 @@
   border: 0;
   text-align: left;
   color: #5e66cc;
-  background-image: url("assets/trash.png");
+  background-image: url('assets/trash.png');
   background-repeat: no-repeat;
   background-position: 0% 50%;
   background-size: 12px 12px;
@@ -244,7 +244,7 @@
   background-color: transparent;
 }
 .leaflet-retina .leaflet-measure-resultpopup a.deletemarkup {
-  background-image: url("assets/trash_@2X.png");
+  background-image: url('assets/trash_@2X.png');
 }
 .leaflet-measure-resultpopup a.deletemarkup:hover {
   opacity: 0.5;
@@ -252,8 +252,6 @@
 }
 
 .my-div-icon {
-  /*background-color: white;*/
-  /*border: 1px solid #666;*/
   width: 100px !important;
   height: 16px !important;
   font-weight: bold !important;
