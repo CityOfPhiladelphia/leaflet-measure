@@ -1,7 +1,7 @@
 {
   "name": "leaflet-measure",
   "version": "4.0.0",
-  "description": "Coordinate, linear, and area measure tool for Leaflet maps",
+  "description": "Coordinate, linear, and area measure tool for Leaflet maps. Customized for the City of Philadelphia.",
   "main": "dist/leaflet-measure.js",
   "repository": {
     "type": "git",
