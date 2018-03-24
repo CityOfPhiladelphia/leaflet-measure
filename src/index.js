@@ -15,8 +15,12 @@ import areaPopupTemplate from './templates/area-popup-template.html';
 // alias element selector
 const $ = dom.selectOne;
 
+function numberFormat(num) {
+  return num.toLocaleString();
+}
+
 const templateSettings = {
-  imports: { numberFormat: num => num.toLocaleString(num) },
+  imports: { numberFormat },
   interpolate: /{{([\s\S]+?)}}/g, // mustache
 };
 const controlTemplateCompiled = template(controlTemplate, templateSettings);
