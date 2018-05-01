@@ -68,7 +68,7 @@
   margin-top: 0;
   padding-top: 0;
   border-top: 0;
-  /* text-align: left; */
+  text-align: left;
 }
 .leaflet-control-measure .leaflet-control-measure-interaction {
   padding: 10px 12px;
@@ -89,13 +89,13 @@
 }
 .leaflet-control-measure a.start {
   display: inline;
-  width: auto;
-  height: auto;
+  width: auto !important;
+  height: auto !important;
   padding-left: 20px;
   margin-right: 4px;
   line-height: 1em;
   border: 0;
-  /* text-align: left; */
+  text-align: left;
   color: #5e66cc;
   background-image: url('assets/start.png');
   background-repeat: no-repeat;
@@ -116,13 +116,13 @@
 }
 .leaflet-control-measure a.cancel {
   display: inline;
-  width: auto;
-  height: auto;
+  width: auto !important;
+  height: auto !important;
   padding-left: 20px;
   margin-right: 4px;
   line-height: 1em;
   border: 0;
-  /* text-align: left; */
+  text-align: left;
   color: #5e66cc;
   background-image: url('assets/cancel.png');
   background-repeat: no-repeat;
@@ -143,13 +143,13 @@
 }
 .leaflet-control-measure a.undo {
   display: inline;
-  width: auto;
-  height: auto;
+  width: auto !important;
+  height: auto !important;
   padding-left: 20px;
   margin-right: 4px;
   line-height: 1em;
   border: 0;
-  /* text-align: left; */
+  text-align: left;
   color: #5e66cc;
   background-image: url('assets/undo.png');
   background-repeat: no-repeat;
@@ -170,13 +170,13 @@
 }
 .leaflet-control-measure a.finish {
   display: inline;
-  width: auto;
-  height: auto;
+  width: auto !important;
+  height: auto !important;
   padding-left: 20px;
   margin-right: 4px;
   line-height: 1em;
   border: 0;
-  /* text-align: left; */
+  text-align: left;
   color: #5e66cc;
   background-image: url('assets/check.png');
   background-repeat: no-repeat;
@@ -198,13 +198,13 @@
 
 .leaflet-measure-resultpopup a.zoomto {
   display: inline;
-  width: auto;
-  height: auto;
+  width: auto !important;
+  height: auto !important;
   padding-left: 20px;
   margin-right: 4px;
   line-height: 1em;
   border: 0;
-  /* text-align: left; */
+  text-align: left;
   color: #5e66cc;
   background-image: url('assets/focus.png');
   background-repeat: no-repeat;
@@ -225,13 +225,13 @@
 }
 .leaflet-measure-resultpopup a.deletemarkup {
   display: inline;
-  width: auto;
-  height: auto;
+  width: auto !important;
+  height: auto !important;
   padding-left: 20px;
   margin-right: 4px;
   line-height: 1em;
   border: 0;
-  /* text-align: left; */
+  text-align: left;
   color: #5e66cc;
   background-image: url('assets/trash.png');
   background-repeat: no-repeat;
