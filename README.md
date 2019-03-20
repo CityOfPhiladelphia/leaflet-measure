@@ -1,6 +1,12 @@
-**Note: this is a fork of leaflet-measure which adds features required by [Mapboard](https://github.com/CityOfPhiladelphia/mapboard), such as polygon segment lengths and a final table of coordinates. It was also adapted to function as an ES module for easier bundling with Webpack.**
+# CityOfPhiladelphia's fork of leaflet-measure
 
-# leaflet-measure
+This is a fork of [leaflet-measure](https://github.com/ljagis/leaflet-measure) which adds features required by [Mapboard](https://github.com/CityOfPhiladelphia/mapboard), such as polygon segment lengths and a final table of coordinates. It was also adapted to function as an ES module for easier bundling with Webpack.
+
+There is more information about all forked repos in the [phila-vue-mapping wiki](https://github.com/CityOfPhiladelphia/phila-vue-mapping/wiki/ForkedDependencies)
+
+
+
+-----------------------------------------------------------------------------
 
 Coordinate, linear, and area measure control for [Leaflet](http://leafletjs.com) maps. Extends [L.Control](http://leafletjs.com/reference.html#control).
 
